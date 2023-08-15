@@ -154,4 +154,3 @@ AUTH_USER_MODEL = 'veterinaries.Veterinaries'
 MIGRATION_MODULES = {
     'models_nestjs': None,
 }
-
