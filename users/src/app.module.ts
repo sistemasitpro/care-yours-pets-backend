@@ -6,11 +6,12 @@ import {Pet} from "./pet/entities/pet/pet";
 import {Province} from "./province/entities/province/province";
 import {City} from "./city/entities/city/city";
 import {JwtBlacklistNestjs} from "./jwt-blacklist-nestjs/entities/jwt-blacklist-nestjs/jwt-blacklist-nestjs";
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
+import {AuthModule} from "./auth/auth.module";
 @Module({
-  imports: [UserModule,
+  imports: [
+      UserModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

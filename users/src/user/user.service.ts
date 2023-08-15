@@ -6,6 +6,7 @@ import {City} from "../city/entities/city/city";
 import {Repository} from "typeorm";
 import * as bcrypt from 'bcrypt';
 import {ES_I18N_MESSAGES} from "./es_i18n_message";
+import {UpdateUserDto} from "./dto/udpate-user.dto/udpate-user.dto";
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,26 @@ export class UserService {
         @InjectRepository(User) private usersRepository: Repository<User>,
         @InjectRepository(City) private cityRepository: Repository<City>,
     ) {}
+    async update(userUid: string, updateUserDto: UpdateUserDto): Promise<User> {
+        try {
+            const user = await this.usersRepository.findOne({
+                where: { uid: userUid },
+            });
+            const updatedUser = { ...user, ...updateUserDto };
+            const savedUser = await this.usersRepository.save(updatedUser);
+            return savedUser;
+        } catch (error) {
+            return error;
+        }
+    }
+    async findOneByEmail(email: string): Promise<User> {
+        return this.usersRepository.findOne({
+            relations: ['city'],
+            where: {
+                email: email,
+            },
+        });
+    }
     async insert(body: UserDto): Promise<any> {
         //GENERATE PASSWORD
         body.password = await bcrypt.hash(body.password, 10);
