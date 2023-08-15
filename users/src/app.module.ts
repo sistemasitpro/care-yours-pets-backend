@@ -8,10 +8,12 @@ import {City} from "./city/entities/city/city";
 import {JwtBlacklistNestjs} from "./jwt-blacklist-nestjs/entities/jwt-blacklist-nestjs/jwt-blacklist-nestjs";
 import { UserModule } from './user/user.module';
 import {AuthModule} from "./auth/auth.module";
+import {PetModule} from "./pet/pet.module";
 @Module({
   imports: [
       UserModule,
     AuthModule,
+      PetModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
