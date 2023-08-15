@@ -1,5 +1,6 @@
 # models
 from veterinaries.models import Veterinaries
+from models_nestjs.models import Cities
 
 # faker
 from faker import Faker
@@ -39,6 +40,23 @@ class VeterinaryFactory:
             'email': 'email@.com',
             'phone_number':f'{faker.bothify(text="###########")}',
             'password':'123456789',
+        }
+    
+    def create_instance(self, city_id:Cities) -> dict:
+        data = self.build_JSON(city_id)
+        instance = self.model.objects.create_veterinary(
+            nif_cif=data['nif_cif'],
+            name=data['name'],
+            description=data['description'],
+            email=data['email'],
+            city_id=data['city_id'],
+            address=data['address'],
+            phone_number=data['phone_number'],
+            password=data['password'],
+        )
+        return {
+            'instance': instance,
+            'data':data,
         }
 
 vetf = VeterinaryFactory()
