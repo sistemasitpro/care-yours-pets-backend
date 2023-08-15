@@ -6,8 +6,11 @@ import {Pet} from "./pet/entities/pet/pet";
 import {Province} from "./province/entities/province/province";
 import {City} from "./city/entities/city/city";
 import {JwtBlacklistNestjs} from "./jwt-blacklist-nestjs/entities/jwt-blacklist-nestjs/jwt-blacklist-nestjs";
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { UserModule } from './user/user.module';
 @Module({
-  imports: [
+  imports: [UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -20,8 +23,9 @@ import {JwtBlacklistNestjs} from "./jwt-blacklist-nestjs/entities/jwt-blacklist-
       database: process.env.DATABASE_NAME,
       //autoLoadEntities: true,
       entities: [User, Pet, City, Province, JwtBlacklistNestjs],
-      synchronize: true,
+      synchronize: false,
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],
