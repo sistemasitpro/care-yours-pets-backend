@@ -154,3 +154,12 @@ AUTH_USER_MODEL = 'veterinaries.Veterinaries'
 MIGRATION_MODULES = {
     'models_nestjs': None,
 }
+
+# Cors settings
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',
+    'https://pre.careyourspets.duckdns.org',
+    'https://careyourspets.duckdns.org'
+]
