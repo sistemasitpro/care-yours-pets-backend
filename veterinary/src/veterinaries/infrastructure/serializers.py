@@ -48,7 +48,7 @@ class RegisterVeterinary(CustomErrorMessages):
                 message="Este NIF/CIF ya está en uso."
             ),
             RegexValidator(
-                regex=r'^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$',
+                regex=r'^(?=.*[A-Za-z])[A-Za-z0-9][0-9]{7}[A-Za-z0-9]$',
                 message='NIF/CIF inválido.',
                 code='invalid_data',
             ),
