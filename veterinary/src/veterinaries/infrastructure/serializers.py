@@ -181,6 +181,5 @@ class VeterinaryInfo(serializers.ModelSerializer):
         id = self.context['kwargs'].get('pk')
         if id:
             del JSON['id']
-            print('dentro')
             return JSON
         return JSON

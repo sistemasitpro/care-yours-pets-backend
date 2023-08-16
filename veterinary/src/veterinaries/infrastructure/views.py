@@ -29,6 +29,8 @@ from .serializers import (
 from veterinaries.domain.jwt_repository import jwtr
 from veterinaries.domain.veterinary_repository import vetr
 
+from send_email.aplication.confirm_email import send_email
+
 
 class Register(generics.GenericAPIView):
     
@@ -38,6 +40,7 @@ class Register(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            send_email(request, serializer.instance, 'vet')
             msg = {
                 'detail':f'Resgistro completado. Se ha enviado un enlace de activación de cuenta al correo {serializer.validated_data["email"]}'
             }

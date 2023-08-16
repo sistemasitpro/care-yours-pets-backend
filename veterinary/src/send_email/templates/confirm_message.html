@@ -1,0 +1,43 @@
+{% autoescape off %}
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Confirmar correo electrónico</title>
+            <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  font-size: 14px;
+                  line-height: 1.4;
+                  color: #333333;
+                }
+                h2 {
+                  font-size: 18px;
+                  margin-bottom: 10px;
+                }
+                p {
+                  margin-bottom: 10px;
+                }
+                a {
+                  color: #0066cc;
+                  text-decoration: none;
+                }
+                a:hover {
+                  text-decoration: underline;
+                }
+              </style>
+        </head>
+        <body>
+            <div>
+                <h2>Confirmar correo electrónico</h2>
+                <p>Hola {{user.name}},</p>
+                <p>Gracias por registrarte. Para confirmar tu dirección de correo electrónico, haz clic en el siguiente enlace:</p>
+                <p><a href="http://{{domain}}{% url 'confirm_email' rol=rol idb64=id tkn=token %}"><button>Confirmar</button></a></p>
+                <p>Si no solicitaste este registro, puedes ignorar este correo electrónico.</p>
+                <p>Saludos,</p>
+                <p>Equipo de soporte</p>
+            </div>
+        </body>
+    </html>
+{% endautoescape %}

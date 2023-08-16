@@ -48,4 +48,10 @@ class Repository:
         
         return self.models.objects.filter(is_active=True).all().only('id', 'name', 'description', 'city_id', 'address', 'phone_number')
 
+    def get_by_id(self, id:str) -> Veterinaries | None:
+        return self.models.objects.filter(id=id).only('id', 'name', 'description', 'city_id', 'address', 'phone_number', 'is_active').first()
+    
+    def get_by_only_id(self, id:str) -> Veterinaries | None:
+        return self.models.objects.filter(id=id).only('id').first()
+
 vetr = Repository()

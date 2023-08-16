@@ -6,6 +6,6 @@ from .views import Veternary
 
 
 router = routers.SimpleRouter()
-router.register(r'veterinary', Veternary, basename='veterinary-info')
+router.register(r'veterinaries', Veternary, basename='veterinary-info')
 
 urlpatterns = router.urls

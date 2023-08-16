@@ -21,4 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('veterinaries.infrastructure.urls')),
+    path('', include('send_email.infrastructure.urls')),
 ]
