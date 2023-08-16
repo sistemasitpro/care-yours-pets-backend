@@ -1,7 +1,7 @@
 # django rest
 from rest_framework.response import Response
 from rest_framework import (
-    generics, status
+    generics, status, permissions
 )
 
 # django
@@ -10,6 +10,8 @@ from django.contrib.auth import authenticate
 # simple_jwt
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 
 # python
 from datetime import datetime
@@ -102,5 +104,53 @@ class Login(TokenObtainPairView):
         return Response(
             data=msg,
             status=status.HTTP_401_UNAUTHORIZED,
+            content_type='application/json',
+        )
+
+
+class Logout(generics.GenericAPIView):
+    
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        if not request.data.get('refresh_token'):
+            msg = {
+                'detail':'Refresh token is required.'
+            }
+            return Response(
+                data=msg,
+                status=status.HTTP_400_BAD_REQUEST,
+                content_type='application/json',
+            )
+        
+        # refresh token is added to table BlacklistedToken
+        try:
+            refresh_token = RefreshToken(token=request.data.get('refresh_token'))
+        except TokenError as e:
+            msg = {
+                'detail':str(e),
+            }
+            return Response(
+                data=msg,
+                status=status.HTTP_401_UNAUTHORIZED,
+                content_type='application/json',
+            )
+        refresh_token.blacklist()
+        
+        # access token is added to table BlacklistedToken
+        decoded_access_token = jwt.decode(
+            jwt=request.headers.get('Authorization').split(' ')[1],
+            key=SIMPLE_JWT['SIGNING_KEY'],
+            algorithms=[SIMPLE_JWT['ALGORITHM']],
+        )
+        jwtr.create_blacklistedtoken(
+            access_token=jwtr.get_by_only_jti(jti=decoded_access_token['jti'])
+        )
+        msg = {
+            'detail':'Sesión cerrada.'
+        }
+        return Response(
+            data=msg,
+            status=status.HTTP_200_OK,
             content_type='application/json',
         )

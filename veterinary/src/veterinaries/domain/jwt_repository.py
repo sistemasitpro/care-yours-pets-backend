@@ -22,4 +22,12 @@ class Repository:
             expires_at=data['expires_at'],
         )
 
+    def create_blacklistedtoken(self, access_token:OutstandingToken) -> BlacklistedToken:
+        return self.model_blacklistedtoken.objects.create(
+            token=access_token,
+        )
+    
+    def get_by_only_jti(self, jti:str) -> OutstandingToken | None:
+        return self.model_outstandingtoken.objects.filter(jti=jti).only('id').first()
+
 jwtr = Repository()
