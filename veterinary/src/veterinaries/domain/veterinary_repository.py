@@ -25,4 +25,7 @@ class Repository:
             password=data['password'],
         )
 
+    def get_all(self) -> Veterinaries | None:
+        return self.models.objects.filter(is_active=True).all().only('id', 'name', 'description', 'city_id', 'address', 'phone_number')
+
 vetr = Repository()

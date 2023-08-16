@@ -1,7 +1,7 @@
 # django rest
 from rest_framework.response import Response
 from rest_framework import (
-    generics, status, permissions
+    generics, status, permissions, viewsets
 )
 
 # django
@@ -22,11 +22,12 @@ from settings.settings import SIMPLE_JWT
 
 # serializers
 from .serializers import (
-    RegisterVeterinary
+    RegisterVeterinary, VeterinaryInfo
 )
 
 # repositories
 from veterinaries.domain.jwt_repository import jwtr
+from veterinaries.domain.veterinary_repository import vetr
 
 
 class Register(generics.GenericAPIView):
@@ -153,4 +154,31 @@ class Logout(generics.GenericAPIView):
             data=msg,
             status=status.HTTP_200_OK,
             content_type='application/json',
+        )
+
+
+class Veternary(viewsets.ReadOnlyModelViewSet):
+    
+    serializer_class = VeterinaryInfo
+    
+    def get_queryset(self):
+        return vetr.get_all()
+    
+    def list(self, request, *args, **kwargs):
+        page = self.paginate_queryset(self.get_queryset())
+        if page:
+            serializer = self.serializer_class(page, many=True, context={'kwargs':kwargs})
+            return Response(
+                data=serializer.data,
+                status=status.HTTP_200_OK,
+                content_type='application/json'
+            )
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object(), context={'kwargs':kwargs})
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK,
+            content_type='application/json'
         )

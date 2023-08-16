@@ -152,3 +152,35 @@ class RegisterVeterinary(CustomErrorMessages):
     # methods
     def create(self, validated_data):
         return vetr.create(data=validated_data)
+
+
+class VeterinaryInfo(serializers.ModelSerializer):
+    
+    class Meta:
+        modedel = get_user_model()
+        fields = ['id', 'name', 'description', 'city_id', 'address', 'phone_number']
+        read_only_fields = fields
+    
+    # methods
+    def to_representation(self, instance):
+        JSON = {
+            'id':instance.id,
+            'name':instance.name,
+            'description':instance.description,
+            'locality':{
+                'id:':instance.city_id.id,
+                'name':instance.city_id.name,
+                'province':{
+                    'id':instance.city_id.province_id.id,
+                    'name':instance.city_id.province_id.name,
+                }
+            },
+            'address':instance.address,
+            'phone_number':instance.phone_number,
+        }
+        id = self.context['kwargs'].get('pk')
+        if id:
+            del JSON['id']
+            print('dentro')
+            return JSON
+        return JSON
