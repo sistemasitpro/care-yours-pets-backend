@@ -13,13 +13,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 
-# python
-from datetime import datetime
-import jwt
-
-# settings
-from settings.settings import SIMPLE_JWT
-
 # serializers
 from .serializers import (
     RegisterVeterinary, VeterinaryInfo
@@ -29,6 +22,7 @@ from .serializers import (
 from veterinaries.domain.jwt_repository import jwtr
 from veterinaries.domain.veterinary_repository import vetr
 
+# send email
 from send_email.aplication.confirm_email import send_email
 
 
@@ -78,20 +72,10 @@ class Login(TokenObtainPairView):
         if veterinary_instance.is_active:
             serializer = self.serializer_class(data=request.data)
             if serializer.is_valid():
-                # access is added to table outstandingtoken
-                decoded_access_token = jwt.decode(
-                    jwt=serializer.validated_data['access'],
-                    key=SIMPLE_JWT['SIGNING_KEY'],
-                    algorithms=[SIMPLE_JWT['ALGORITHM']],
-                )
+                # access token is added to table outstandingtoken
                 jwtr.create_outstandingtoken(
-                    data={
-                        'veterinary_instance':veterinary_instance,
-                        'jti':decoded_access_token['jti'],
-                        'token':serializer.validated_data['access'],
-                        'created_at':datetime.now(),
-                        'expires_at':datetime.fromtimestamp(decoded_access_token['exp']).isoformat(),
-                    }
+                    instance=veterinary_instance,
+                    token=serializer.validated_data['access']
                 )
                 msg = {
                     'access_token':serializer.validated_data['access'],
@@ -142,13 +126,8 @@ class Logout(generics.GenericAPIView):
         refresh_token.blacklist()
         
         # access token is added to table BlacklistedToken
-        decoded_access_token = jwt.decode(
-            jwt=request.headers.get('Authorization').split(' ')[1],
-            key=SIMPLE_JWT['SIGNING_KEY'],
-            algorithms=[SIMPLE_JWT['ALGORITHM']],
-        )
         jwtr.create_blacklistedtoken(
-            access_token=jwtr.get_by_only_jti(jti=decoded_access_token['jti'])
+            token=request.headers.get('Authorization').split(' ')[1]
         )
         msg = {
             'detail':'Sesión cerrada.'

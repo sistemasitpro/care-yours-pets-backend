@@ -5,7 +5,6 @@ from django.contrib.auth.models import (
 from django.db import models
 
 # Python
-from datetime import datetime
 import uuid
 
 
@@ -117,11 +116,11 @@ class Veterinaries(AbstractBaseUser, PermissionsMixin):
         null=False,
         blank=False,
     )
-    is_staff = models.BooleanField(db_column='is_staff', default=False)
-    is_superuser = models.BooleanField(db_column="is_superuser", default=False)
+    is_staff = models.BooleanField(db_column='is_staff', default=False, serialize=False)
+    is_superuser = models.BooleanField(db_column="is_superuser", default=False,  serialize=False)
     is_active = models.BooleanField(db_column='is_active', default=False)
-    date_joined = models.FloatField(db_column='date_joined', default=datetime.now().timestamp())
-    last_login = models.FloatField(db_column='last_login', null=True, blank=True)
+    date_joined = models.DateTimeField(db_column='date_joined', auto_now_add=True,  serialize=False)
+    last_login = models.DateTimeField(db_column='last_login', null=True, blank=True,  serialize=False)
     
     objects = VeterinaryManager()
     

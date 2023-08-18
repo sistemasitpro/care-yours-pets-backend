@@ -11,7 +11,7 @@ class TokenDjango(models.Model):
         unique=True,
         null=False,
     )
-    at_created = models.DateTimeField(db_column='at_created', null=False)
+    at_created = models.DateTimeField(db_column='at_created', null=False, auto_now_add=True)
     
     class Meta:
         db_table='token_django'

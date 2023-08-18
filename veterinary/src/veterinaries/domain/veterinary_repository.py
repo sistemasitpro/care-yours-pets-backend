@@ -14,20 +14,10 @@ class Repository:
     """
     
     def __init__(self) -> None:
-        self.models = get_user_model()
+        self.model = get_user_model()
     
     def create(self, data:dict) -> Veterinaries:
-        """
-        Creates a new instance of the Veterinaries model with the provided data.
-
-        Parameters:
-            data (dict): A dictionary containing the data to create a new Veterinaries instance.
-
-        Returns:
-            Veterinaries: The new Veterinaries instance that has been created.
-        """
-        
-        return self.models.objects.create_veterinary(
+        return self.model.objects.create_veterinary(
             nif_cif=data['nif_cif'],
             name=data['name'],
             description=data['description'],
@@ -39,19 +29,12 @@ class Repository:
         )
 
     def get_all(self) -> Veterinaries | None:
-        """
-        Gets all active instances of the Veterinaries model.
-
-        Returns:
-            Veterinaries | None: A list of all active Veterinaries instances, or None if there are none.
-        """
-        
-        return self.models.objects.filter(is_active=True).all().only('id', 'name', 'description', 'city_id', 'address', 'phone_number')
+        return self.model.objects.filter(is_active=True).all().only('id', 'name', 'description', 'city_id', 'address', 'phone_number')
 
     def get_by_id(self, id:str) -> Veterinaries | None:
-        return self.models.objects.filter(id=id).only('id', 'name', 'description', 'city_id', 'address', 'phone_number', 'is_active').first()
+        return self.model.objects.filter(id=id).only('id', 'name', 'description', 'city_id', 'address', 'phone_number', 'is_active').first()
     
     def get_by_only_id(self, id:str) -> Veterinaries | None:
-        return self.models.objects.filter(id=id).only('id').first()
+        return self.model.objects.filter(id=id).only('id').first()
 
 vetr = Repository()

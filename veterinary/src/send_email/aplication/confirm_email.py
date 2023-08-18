@@ -32,7 +32,4 @@ def send_email(request, instance, rol) -> None:
     )
     email.content_subtype = 'html'
     email.send()
-    tkdr.create(data={
-        'token':context['token'],
-        'at_created':timezone.now()
-    })
+    tkdr.create(context['token'])

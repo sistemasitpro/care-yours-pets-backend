@@ -5,10 +5,14 @@ from rest_framework  import status
 # django
 from django.urls import reverse
 
+# simple jwt
+from rest_framework_simplejwt.tokens import RefreshToken
+
 # factory
 from test.factory.veterinary import vetf
 
 # models
+from veterinaries.domain.jwt_repository import jwtr
 from models_nestjs.models import Provinces, Cities
 
 #import pdb; pdb.set_trace()
@@ -34,24 +38,24 @@ class Test(APITestCase):
         self.veterinary_instance.is_active = True
         self.veterinary_instance.save()
         
-        # login request data
-        data = factory['data']
-        JSON = {
-            'nif_cif':data['nif_cif'],
-            'password':data['password'],
-        }
-        response = self.client.post(reverse('login'), JSON, format='json')
-        
         # obtain access_token and refresh_token
+        self.refresh_token = RefreshToken.for_user(self.veterinary_instance)
+        self.access_token = str(self.refresh_token.access_token)
         self.JSON = {
-            'refresh_token':response.data['refresh_token'],
+            'refresh_token':str(self.refresh_token),
         }
+        jwtr.create_outstandingtoken(
+            instance=self.veterinary_instance,
+            token=self.access_token,
+        )
+        
+        # authentication
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {response.data["access_token"]}')
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         
         # path
         kwargs = {
-            'id':str(self.veterinary_instance.id),
+            'id':self.veterinary_instance.id,
         }
         self.url = reverse('logout', kwargs=kwargs)
     
