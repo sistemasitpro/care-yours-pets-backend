@@ -9,8 +9,11 @@ import {JwtBlacklistNestjs} from "./jwt-blacklist-nestjs/entities/jwt-blacklist-
 import { UserModule } from './user/user.module';
 import {AuthModule} from "./auth/auth.module";
 import {PetModule} from "./pet/pet.module";
+import { ExternalApiService } from './external-api/external-api.service';
+import {HttpModule} from "@nestjs/axios";
 @Module({
   imports: [
+    HttpModule,
       UserModule,
     AuthModule,
       PetModule,
@@ -27,10 +30,9 @@ import {PetModule} from "./pet/pet.module";
       //autoLoadEntities: true,
       entities: [User, Pet, City, Province, JwtBlacklistNestjs],
       synchronize: false,
-    }),
-    UserModule,
+    })
   ],
   controllers: [],
-  providers: [],
+  providers: [ExternalApiService],
 })
 export class AppModule {}

@@ -7,17 +7,19 @@ import {Repository} from "typeorm";
 import * as bcrypt from 'bcrypt';
 import {ES_I18N_MESSAGES} from "./es_i18n_message";
 import {UpdateUserDto} from "./dto/udpate-user.dto/udpate-user.dto";
+import {ExternalApiService} from "../external-api/external-api.service";
 
 @Injectable()
 export class UserService {
     constructor(
+        private externalApiService: ExternalApiService,
         @InjectRepository(User) private usersRepository: Repository<User>,
-        @InjectRepository(City) private cityRepository: Repository<City>,
+        @InjectRepository(City) private cityRepository: Repository<City>
     ) {}
     async update(userUid: string, updateUserDto: UpdateUserDto): Promise<User> {
         try {
             const user = await this.usersRepository.findOne({
-                where: { uid: userUid },
+                where: { id: userUid },
             });
             const updatedUser = { ...user, ...updateUserDto };
             const savedUser = await this.usersRepository.save(updatedUser);
@@ -49,6 +51,7 @@ export class UserService {
         //VERIFY EMAIL AND PHONE EXIST
         try {
             await this.usersRepository.save(user);
+            //this.externalApiService.activateUser({},{})
             return {
                 message:
                     'Usuario creado correctamente, y se envió un enlace de activación a su correo: ' +

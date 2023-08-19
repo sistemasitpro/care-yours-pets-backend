@@ -14,7 +14,7 @@ export class PetService {
   async insert(petDto: PetDto) {
     //FIND USER
     const user = await this.userRepository.findOne({
-      where: { uid: petDto.user_uid },
+      where: { id: petDto.user_uid },
     });
     //CREATE PET
     const pet = this.petRepository.create({ ...petDto, user: user });
