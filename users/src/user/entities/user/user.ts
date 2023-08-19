@@ -13,7 +13,7 @@ import { Pet } from '../../../pet/entities/pet/pet';
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    uid: string;
+    id: string;
 
     @Column({ type: 'varchar', length: 200, nullable: false })
     name: string;

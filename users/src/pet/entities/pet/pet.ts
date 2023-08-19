@@ -12,7 +12,7 @@ import { User } from '../../../user/entities/user/user';
 export class Pet {
     @PrimaryGeneratedColumn('uuid')
     uid: string;
-    @ManyToOne(() => User, (user) => user.uid, { onDelete: 'CASCADE' })
+    @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_uid' })
     user: User;
     @Column({ type: 'varchar', length: 200, nullable: false })

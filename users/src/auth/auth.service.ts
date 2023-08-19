@@ -23,13 +23,13 @@ export class AuthService {
       throw new BadRequestException('Contraseña incorrecta');
     }
 
-    const tokens = await this.getTokens(user.uid, user.email);
-    await this.updateRefreshToken(user.uid, tokens.refreshToken);
+    const tokens = await this.getTokens(user.id, user.email);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
 
     return {
       ...tokens,
       name: user.name,
-      uuid: user.uid,
+      uuid: user.id,
     };
   }
   hashData(data: string) {
