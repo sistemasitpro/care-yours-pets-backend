@@ -137,8 +137,6 @@ Estos son los pasos para la inicialización del servidor Django Rest Framework e
     care-yours-pets-backend/backend_drf/src/backend_settings/settings/base.py
     ```
 
-    ![](./images/MM.png)
-
     Si deseas iniciar los dos servidores de desarollo (DRF y NestJS) al mismo tiempo solamente aplicamos las migraciones con el siguiente comando.
 
     ```bash
