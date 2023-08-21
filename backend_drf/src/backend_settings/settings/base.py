@@ -119,10 +119,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User model
 AUTH_USER_MODEL = 'veterinaries.Veterinaries'
 
-"""# Migrations settings
+# Migrations settings
 MIGRATION_MODULES = {
     'models_nestjs': None,
-}"""
+}
 
 # Cors settings
 CORS_ORIGIN_ALLOW_ALL = False
@@ -190,6 +190,7 @@ SIMPLE_JWT = {
 
 # send email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
 EMAIL_FROM_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')

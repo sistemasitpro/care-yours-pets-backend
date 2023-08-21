@@ -4,7 +4,6 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
-from django.utils import timezone
 
 # utils
 from send_email.utils import token
