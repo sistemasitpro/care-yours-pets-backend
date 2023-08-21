@@ -25,7 +25,7 @@ jobs:
       - name: Build and push Python Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./backend_drf/src
           file: ./backend_drf/src/Dockerfile
           push: true
           tags: careyourspets/equipo-4-backend:stage-django-latest
