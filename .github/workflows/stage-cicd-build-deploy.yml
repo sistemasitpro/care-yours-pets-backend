@@ -22,7 +22,6 @@ jobs:
       # Replace this with actual steps for your Python app
       - name: Checking List . python compiling Files
         run: ls -ltrah . && ls -ltrah backend_drf/src
-      - run: pip install -r requirements.txt
       - name: Build and push Python Docker image
         uses: docker/build-push-action@v2
         with:
