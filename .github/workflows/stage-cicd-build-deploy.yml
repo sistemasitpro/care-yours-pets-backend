@@ -19,7 +19,8 @@ jobs:
         with:
           node-version: "18"
       - run: npm install -g @nestjs/cli
-
+      - name: Checking List . python compiling Files
+        run: ls -ltrah .
       - name: Build and push NestJS Docker image
         uses: docker/build-push-action@v2
         with:
@@ -36,6 +37,8 @@ jobs:
 
       # Add steps to install Python dependencies and build Python app
       # Replace this with actual steps for your Python app
+      - name: Checking List . python compiling Files
+        run: ls -ltrah .
       - run: pip install -r requirements.txt
       - name: Build and push Python Docker image
         uses: docker/build-push-action@v2
