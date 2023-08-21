@@ -24,11 +24,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('KEY_DJANGO')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 BASE_APPS = [
@@ -65,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'settings_backend.urls'
+ROOT_URLCONF = 'backend_settings.urls'
 
 TEMPLATES = [
     {
@@ -83,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'settings_backend.wsgi.application'
+WSGI_APPLICATION = 'backend_settings.wsgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -116,11 +111,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -129,10 +119,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom User model
 AUTH_USER_MODEL = 'veterinaries.Veterinaries'
 
-# Migrations settings
+"""# Migrations settings
 MIGRATION_MODULES = {
     'models_nestjs': None,
-}
+}"""
 
 # Cors settings
 CORS_ORIGIN_ALLOW_ALL = False
@@ -154,7 +144,7 @@ REST_FRAMEWORK = {
 
 # Custom ModelBackend
 AUTHENTICATION_BACKENDS = [
-    'veterinaries.aplication.authentication.NIFCIFBackend',
+    'veterinaries.backends.NIFCIFBackend',
 ]
 
 # JWT settings

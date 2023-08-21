@@ -4,14 +4,9 @@ from rest_framework import (
     generics, status, permissions, viewsets
 )
 
-# django
-from django.contrib.auth import authenticate
-
 # simple_jwt
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
 
 # serializers
 from .serializers import (
@@ -24,6 +19,10 @@ from veterinaries.domain.veterinary_repository import vetr
 
 # send email
 from send_email.aplication.confirm_email import send_email
+
+# aplication
+from veterinaries.aplication.authentication import VeterinaryAuth
+from veterinaries.aplication.logout import VeterinaryLogout
 
 
 class Register(generics.GenericAPIView):
@@ -53,89 +52,51 @@ class Register(generics.GenericAPIView):
 class Login(TokenObtainPairView):
     
     serializer_class = TokenObtainPairSerializer
+    auth_class = VeterinaryAuth
     
     def post(self, request, *args, **kwargs):
-        veterinary_instance = authenticate(
-            request,
-            nif_cif=request.data.get('nif_cif'),
-            password=request.data.get('password')
-        )
-        if not veterinary_instance:
+        authentication = self.auth_class(request, data=request.data)
+        if not authentication.is_complete():
+            return Response(
+                data=authentication.error,
+                status=authentication.status,
+                content_type='application/json'
+            )
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # access token is added to table outstandingtoken
+            jwtr.create_outstandingtoken(
+                instance=authentication.instance,
+                token=serializer.validated_data['access']
+            )
             msg = {
-                'detail':'Credenciales inválidas.'
+                'access_token':serializer.validated_data['access'],
+                'refresh_token':serializer.validated_data['refresh'],
             }
             return Response(
                 data=msg,
-                status=status.HTTP_400_BAD_REQUEST,
+                status=authentication.status,
                 content_type='application/json',
             )
-        if veterinary_instance.is_active:
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                # access token is added to table outstandingtoken
-                jwtr.create_outstandingtoken(
-                    instance=veterinary_instance,
-                    token=serializer.validated_data['access']
-                )
-                msg = {
-                    'access_token':serializer.validated_data['access'],
-                    'refresh_token':serializer.validated_data['refresh'],
-                }
-                return Response(
-                    data=msg,
-                    status=status.HTTP_200_OK,
-                    content_type='application/json',
-                )
-        msg = {
-            'detail':'Su cuenta aun no esta activa.'
-        }
-        return Response(
-            data=msg,
-            status=status.HTTP_401_UNAUTHORIZED,
-            content_type='application/json',
-        )
 
 
 class Logout(generics.GenericAPIView):
     
     permission_classes = (permissions.IsAuthenticated,)
+    logout_calss = VeterinaryLogout
     
     def post(self, request, *args, **kwargs):
-        if not request.data.get('refresh_token'):
-            msg = {
-                'detail':'Refresh token is required.'
-            }
+        logout =self.logout_calss(request, data=request.data)
+        if not logout.is_complete():
             return Response(
-                data=msg,
-                status=status.HTTP_400_BAD_REQUEST,
-                content_type='application/json',
+                data=logout.error,
+                status=logout.status,
+                content_type='application/json'
             )
-        
-        # refresh token is added to table BlacklistedToken
-        try:
-            refresh_token = RefreshToken(token=request.data.get('refresh_token'))
-        except TokenError as e:
-            msg = {
-                'detail':str(e),
-            }
-            return Response(
-                data=msg,
-                status=status.HTTP_401_UNAUTHORIZED,
-                content_type='application/json',
-            )
-        refresh_token.blacklist()
-        
-        # access token is added to table BlacklistedToken
-        jwtr.create_blacklistedtoken(
-            token=request.headers.get('Authorization').split(' ')[1]
-        )
-        msg = {
-            'detail':'Sesión cerrada.'
-        }
         return Response(
-            data=msg,
-            status=status.HTTP_200_OK,
-            content_type='application/json',
+            data=logout.error,
+            status=logout.status,
+            content_type='application/json'
         )
 
 

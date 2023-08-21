@@ -11,7 +11,7 @@ from rest_framework_simplejwt.token_blacklist.models import (
 from veterinaries.models import Veterinaries
 
 # settings
-from settings_backend.settings.base import SIMPLE_JWT
+from backend_settings.settings.base import SIMPLE_JWT
 
 # python
 from datetime import datetime

@@ -60,6 +60,7 @@ class Users(models.Model):
         db_table='users'
         verbose_name = "user"
         verbose_name_plural = "users"
+        managed = False
     
     def __str__(self):
         return self.name

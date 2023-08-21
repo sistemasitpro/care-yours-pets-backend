@@ -8,9 +8,9 @@ from decouple import config
 def main():
     """Run administrative tasks."""
     if config('ENVIRONMENT_STATUS') == 'dev':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings_backend.settings.local')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend_settings.settings.local')
     if config('ENVIRONMENT_STATUS') == 'production':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings_backend.settings.production')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend_settings.settings.production')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
