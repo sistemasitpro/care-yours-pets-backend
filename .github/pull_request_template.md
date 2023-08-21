@@ -1,6 +1,6 @@
-## 1. Descripción
+## 1. Description
 
 [Describir aquí los cambios realizados en este Pull Request en ingles.]
 
 
-Historia de usuario completada: [id de la historia de usuario, si no se trabajo en una historia de usuario borra esta línea de texto.]
+User history completed: [id de la historia de usuario, si no se trabajo en una historia de usuario borra esta línea de texto.]
