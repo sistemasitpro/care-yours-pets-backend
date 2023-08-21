@@ -2,27 +2,27 @@
 
 ## 1. Descripción
 
-Este repositorio alberga el código fuente del backend de la plataforma CareYourPets. Para desarrollar este backend nos hemos apoyado en dos marcos de trabajo muy potentes, NestJS y Django Rest.
+Este repositorio contiene el código fuente del backend de la plataforma CareYourPets. El backend se desarrolló utilizando dos marcos de trabajo potentes: NestJS y Django Rest Framework.
 
-NestJS es un framework para la construcción de aplicaciones de servidor eficientes y escalables en [Node.js](https://nodejs.org/). Ha sido diseñado para permitir a los desarrolladores aprovechar el desarrollo de JavaScript del lado del servidor utilizando una sintaxis similar a la de Angular.
+NestJS es un framework para construir aplicaciones de servidor eficientes y escalables en [Node.js](https://nodejs.org/). Permite a los desarrolladores aprovechar el desarrollo de JavaScript del lado del servidor con una sintaxis similar a la de Angular.
 
-Por otro lado, [Django Rest](https://www.django-rest-framework.org/) nos permite construir poderosas API web de manera rápida y fácil, siendo este un marco de trabajo de alto nivel en [Python](https://www.python.org/) que fomenta un diseño limpio y pragmático en el desarrollo.
+[Django Rest](https://www.django-rest-framework.org/) es un marco de trabajo de alto nivel en [Python](https://www.python.org/) que permite construir poderosas API web de manera rápida y fácil. Fomenta un diseño limpio y pragmático en el desarrollo.
 
-La combinación de estas tecnologías nos permitirá crear un backend fiable, rápido y seguro para CareYourPets.
+La combinación de estas tecnologías nos permite crear un backend fiable, rápido y seguro para CareYourPets.
 
 
 ### 1.1 Características del proyecto
 
 - Usuario
-    - Proceso de autenticación para usuarios.
-    - CRUD de usuarios.
-    - Proceso para restablecer la contraseña.
-- mascotas
-    - CRUD de mascotas.
-- veterinarias
-    - CRUD de veterinarias.
-    - Proceso de autenticación para veterinarias.
-    - Proceso para restablecer la contraseña.
+    - Autenticación
+    - CRUD
+    - Restablecimiento de contraseña
+- Mascotas
+    - CRUD
+- Veterinarias
+    - Autenticación
+    - CRUD
+    - Restablecimiento de contraseña
 
 
 
@@ -100,13 +100,21 @@ Estos son los pasos para la inicialización del servidor NestJS en local.
     npm run start:dev
     ```
 
-### 2.2 Inicialización del servidor de desarrollo Django rest
+### 2.2 Inicialización del servidor de desarrollo DRF
 
-Estos son los pasos para la inicialización del servidor NestJS en local.
+Estos son los pasos para la inicialización del servidor Django Rest Framework en local.
 
-- **Paso 1 (requerimientos):** asegúrese de que Python esté instalado en su sistema operativo.
+- **Paso 1 (requerimientos):** asegúrese de tener instalada una version de Python superior a la 3.10 en su sistema operativo.
 
-- **Paso 2 (configurar variables de entorno):** se debe crear un archivo con el nombre ".env" dentro de la carpeta "veterinary". Dentro de este archivo definimos una variable "SECRET_KEY", el valor de esta variable lo obtendremos escribiendo en orden los siguientes comandos en tu consola.
+- **Paso 2 (instalar dependencias):** instala las tecnologías y paquetes que usa el proyecto. Asegurate de estar dentro de la carpeta backend_drf/src.
+
+    ```bash
+    pip install -r "requirements.txt"
+    ```
+
+- **Paso 3 (configurar variables de entorno):** se debe crear un archivo con el nombre ".env" dentro de la carpeta "veterinary". Dentro de este archivo se definiran todas las variables de entorno que necesita el backend de Django rest para funcionar correctamente.
+
+    **Variable KEY_DJANGO:** el valor de esta variable lo obtendremos escribiendo en orden los siguientes comandos en tu consola.
 
     ```bash
     #Primer comando
@@ -115,15 +123,23 @@ Estos son los pasos para la inicialización del servidor NestJS en local.
     #Segundo comando
     from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())
     ```
-    El ultimo comando retorna el valor de la "SECRET_KEY" que deberas copiar en el archivo ".env".
+    El ultimo comando retorna el valor de la "KEY_DJANGO" que deberas copiar en el archivo ".env".
 
-- **Paso 3 (instalar dependencias):** para instalar las teconologias y paquetes que usa el proyecto usa el siguiente comando. Asegurate de estar dentro de la carpeta "backend_djangorest".
+    ![](./images/SK.png)
+
+    Luego en el archivo ".env" agregas el valor de la variable "KEY_DJANGO" junto con las demas variables.
+
+    ![](./images/VE.png)
+
+- **Paso 4 (realizar migraciones):** si deseas iniciar solamente el servidor de desarrollo DRF, primero deberas comentar la variable "MIGRATION_MODULES" en el fichero de la siguiente ruta y luego aplicarlas migraciones.
 
     ```bash
-    pip install -r "requirements.txt"
+    care-yours-pets-backend/backend_drf/src/backend_settings/settings/base.py
     ```
 
-- **Paso 4 (realizar migraciones):** migramos los modelos del proyecto necesarios para el funcionamiento del servidor con el siguiente comando.
+    ![](./images/MM.png)
+
+    Si deseas iniciar los dos servidores de desarollo (DRF y NestJS) al mismo tiempo solamente aplicamos las migraciones con el siguiente comando.
 
     ```bash
     python manage.py migrate
@@ -135,7 +151,8 @@ Estos son los pasos para la inicialización del servidor NestJS en local.
     python manage.py runserver
     ```
 
-Para correr las pruebas unitarias del código "veterinary" ejecuta el siguiente comando.
+### 2.3 Iniciar test
+Para correr las pruebas unitarias del "backend_drf" ejecuta el siguiente comando.
 
 ```bash
 python manage.py test
@@ -145,4 +162,4 @@ python manage.py test
 ## 3. Integrantes del repositorio
 - [Carlos Vega](https://github.com/temeriamos)
 - [Carlos Andres Aguirre](https://github.com/The-Asintota)
-- [Diego](https://github.com/sistemasitpro)
+- [Diego Pérez](https://github.com/sistemasitpro)
