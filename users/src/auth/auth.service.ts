@@ -1,16 +1,17 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {BadRequestException, Inject, Injectable} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { ConfigService } from '@nestjs/config';
+import {ConfigService, ConfigType} from '@nestjs/config';
 import { AuthDto } from './dto/auth.dto/auth.dto';
+import config from "../config";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-    private configService: ConfigService,
+    @Inject(config.KEY) private configService: ConfigType<typeof config>
   ) {}
 
   async signIn(data: AuthDto) {
@@ -54,8 +55,8 @@ export class AuthService {
           email,
         },
         {
-          secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-          expiresIn: this.configService.get<string>('JWT_ACCESS_SECRET_EXPIRY'),
+          secret: this.configService.JWT_ACCESS_SECRET,
+          expiresIn: this.configService.JWT_ACCESS_SECRET_EXPIRY,
         },
       ),
       this.jwtService.signAsync(
@@ -64,10 +65,8 @@ export class AuthService {
           email,
         },
         {
-          secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-          expiresIn: this.configService.get<string>(
-            'JWT_REFRESH_SECRET_EXPIRY',
-          ),
+          secret: this.configService.JWT_REFRESH_SECRET,
+          expiresIn: this.configService.JWT_REFRESH_SECRET_EXPIRY,
         },
       ),
     ]);
