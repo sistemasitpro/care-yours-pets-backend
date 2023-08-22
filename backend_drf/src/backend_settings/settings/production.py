@@ -4,7 +4,7 @@ from .base import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost","pre.api.lcareyourspets.duckdns.org"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost","pre.api.careyourspets.duckdns.org"]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
