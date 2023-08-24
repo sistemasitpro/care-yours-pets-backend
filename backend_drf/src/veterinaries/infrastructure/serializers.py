@@ -12,9 +12,13 @@ from django.core.validators import (
 
 # repositories
 from veterinaries.domain.veterinary_repository import vetr
+from veterinaries.domain.service_repository import vsr
+
+# models
+from veterinaries.models import VeterinaryService
 
 
-class CustomErrorMessages(serializers.ModelSerializer):
+class VeterinaryErrorMessages(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
@@ -33,7 +37,7 @@ class CustomErrorMessages(serializers.ModelSerializer):
         self.fields['phone_number'].error_messages.update(msg)
 
 
-class RegisterVeterinary(CustomErrorMessages):
+class RegisterVeterinary(VeterinaryErrorMessages):
     
     model = get_user_model()
     
@@ -159,6 +163,16 @@ class VeterinaryInfo(serializers.ModelSerializer):
     
     # methods
     def to_representation(self, instance):
+        service_list = []
+        for item in vsr.get_veterinary_services(id=instance.id):
+            service_list.append(
+                {
+                    'service_category':item.service_id.category_id.name,
+                    'service':item.service_id.name,
+                    'name':item.name,
+                    'price':item.price
+                }
+            )
         JSON = {
             'id':instance.id,
             'name':instance.name,
@@ -172,10 +186,42 @@ class VeterinaryInfo(serializers.ModelSerializer):
                 }
             },
             'address':instance.address,
-            'phone_number':instance.phone_number,
+            'services':service_list
         }
-        id = self.context['kwargs'].get('pk')
-        if id:
+        if self.context['kwargs'].get('pk'):
             del JSON['id']
+            JSON['phone_number'] = instance.phone_number
+            JSON['email'] = instance.email
             return JSON
         return JSON
+
+
+class ServiceErrorMessages(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Customized error messages
+        msg = {
+            'required': 'Este campo es requerido.',
+            'blank': 'Este campo no puede estar en blanco.',
+            'null':'Este campo no puede ser nulo.',
+        }
+        self.fields['veterinary_id'].error_messages.update(msg)
+        self.fields['service_id'].error_messages.update(msg)
+        self.fields['name'].error_messages.update(msg)
+        self.fields['price'].error_messages.update(msg)
+
+
+class RegisterService(ServiceErrorMessages):
+    
+    class Meta:
+        model=VeterinaryService
+        fields=['veterinary_id', 'service_id', 'name', 'price']
+    
+    # methods
+    def create(self, validated_data):
+        return vsr.create_service(
+            data=validated_data,
+            veterinary=validated_data['veterinary_id'], # is already an instance of your model
+            service=validated_data['service_id'], # is already an instance of your model
+        )

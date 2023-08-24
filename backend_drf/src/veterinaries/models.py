@@ -44,24 +44,24 @@ class VeterinaryManager(UserManager):
         veterinary.save(using=self._db)
         return veterinary
     
-    def create_veterinary(self, nif_cif:str, name:str, description:str, email:str, city_id,
-                        address:str, phone_number:str, password:str, **extra_fields):
+    def create_veterinary(self, nif_cif:str, name:str, description:str, email:str,
+                          city_id, address:str, phone_number:str, password:str, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         extra_fields.setdefault("is_active", False)
-        return self._create_veterinary(nif_cif, name, description, email, city_id, address,
-                                       phone_number, password, **extra_fields)
+        return self._create_veterinary(nif_cif, name, description, email, city_id,
+                                       address, phone_number, password,**extra_fields)
     
-    def create_superuser(self, nif_cif:str, name:str, description:str, email:str, city_id,
-                         address:str, phone_number:str, password:str,  **extra_fields):
+    def create_superuser(self, nif_cif:str, name:str, description:str, email:str,
+                         city_id, address:str, phone_number:str, password:str, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
-        return self._create_veterinary(nif_cif, name, description, email, city_id, address,
-                                       phone_number, password, **extra_fields)
+        return self._create_veterinary(nif_cif, name, description, email, city_id,
+                                       address, phone_number, password, **extra_fields)
 
 
 class Veterinaries(AbstractBaseUser, PermissionsMixin):
@@ -146,16 +146,16 @@ class VeterinaryService(models.Model):
         blank=False,
         null=False,
     )
-    service_category = models.ForeignKey(
-        db_column='service_category',
-        to='ServiceCategories',
+    service_id = models.ForeignKey(
+        db_column='service_id',
+        to='Service',
         to_field='id',
         on_delete=models.DO_NOTHING,
         blank=False,
         null=False,
     )
-    service_name = models.CharField(
-        db_column='service_name',
+    name = models.CharField(
+        db_column='name',
         max_length=200,
         null=False,
         blank=False,
@@ -174,18 +174,39 @@ class VeterinaryService(models.Model):
         verbose_name_plural = "veterinary_services"
     
     def __str__(self):
-        return self.service_name
+        return self.name
 
 
 class ServiceCategories(models.Model):
     id = models.AutoField(db_column='id', primary_key=True)
-    name = models.CharField(db_column='name', max_length=100, null=False)
+    name = models.CharField(db_column='name', max_length=100, null=False, unique=True)
     description = models.CharField(db_column='description', max_length=500, null=False)
     
     class Meta:
         db_table='service_categories'
         verbose_name = "service_category"
         verbose_name_plural = "service_categories"
+    
+    def __str__(self):
+        return self.name
+
+
+class Service(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    category_id = models.ForeignKey(
+        db_column='categoty_id',
+        to='ServiceCategories',
+        to_field='id',
+        on_delete=models.DO_NOTHING,
+        null=False,
+        blank=False,
+    )
+    name = models.CharField(db_column='name', null=False, blank=False)
+    
+    class Meta:
+        db_table='service'
+        verbose_name = "service"
+        verbose_name_plural = "services"
     
     def __str__(self):
         return self.name
