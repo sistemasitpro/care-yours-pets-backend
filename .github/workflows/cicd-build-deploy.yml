@@ -44,7 +44,7 @@ jobs:
           context: ./backend_drf/src
           file: ./backend_drf/src/Dockerfile
           push: true
-          tags: careyourspets/equipo-4-backend:pre-django-latest
+          tags: careyourspets/equipo-4-backend:django-latest-${{ github.sha }}
 
       # Setup Node.js and NestJS
       - name: Setup Node.js and NestJS
@@ -71,4 +71,4 @@ jobs:
           context: ./users
           file: ./users/Dockerfile
           push: true
-          tags: careyourspets/equipo-4-backend:pre-nestjs-latest
+          tags: careyourspets/equipo-4-backend:nestjs-latest-${{ github.sha }}
