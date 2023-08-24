@@ -1,0 +1,122 @@
+[
+    {
+        "model":"veterinaries.ServiceCategories",
+        "pk":1,
+        "fields":{
+            "name":"Estetica",
+            "description":"Estos servicios se ocupan del cuidado y la apariencia de los animales. Incluyen el baño y aseo de animales, el corte de pelo y peluquería canina, el cuidado dental y la limpieza bucal, así como los tratamientos dermatológicos."
+        }
+    },
+    {
+        "model":"veterinaries.ServiceCategories",
+        "pk":2,
+        "fields":{
+            "name":"Clinicos",
+            "description":"Estos servicios se enfocan en el diagnóstico y tratamiento de enfermedades, trastornos y lesiones en animales. Incluyen el tratamiento de animales enfermos, el control de trastornos que limitan la producción y el diagnóstico de enfermedades."
+        }
+    },
+    {
+        "model":"veterinaries.ServiceCategories",
+        "pk":3,
+        "fields":{
+            "name":"Preventivos",
+            "description":"Estos servicios se centran en la prevención de enfermedades epidémicas en animales. Incluyen la vacunación y desparasitación."
+        }
+    },
+    {
+        "model":"veterinaries.ServiceCategories",
+        "pk":4,
+        "fields":{
+            "name":"Servicios especializados",
+            "description":"Estos servicios se refieren a las especialidades clínicas veterinarias, como odontología, dermatología, fisioterapia, traumatología, oncología, neurología, entre otras. También pueden incluir especialidades según la especie, como aves, fauna silvestre, animales exóticos, peces, etc."
+        }
+    },
+    {
+        "model":"veterinaries.ServiceCategories",
+        "pk":5,
+        "fields":{
+            "name":"Hospitalización y cuidados especiales",
+            "description":"Servicios proporcionados a los animales que necesitan atención médica intensiva o cuidados adicionales después de una cirugía u otra condición grave. Durante este período, los animales reciben cuidados especializados, monitoreo constante y terapias específicas para asegurar su recuperación y bienestar óptimos."
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":1,
+        "fields":{
+            "category_id":1,
+            "name":"Baño y aseo de animales"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":2,
+        "fields":{
+            "category_id":1,
+            "name":"Peluquería"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":3,
+        "fields":{
+            "category_id":1,
+            "name":"Cuidado dental y limpieza bucal"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":4,
+        "fields":{
+            "category_id":2,
+            "name":"Diagnóstico"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":5,
+        "fields":{
+            "category_id":2,
+            "name":"Tratamiento de enfermedades"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":6,
+        "fields":{
+            "category_id":3,
+            "name":"Prevención de enfermedades"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":7,
+        "fields":{
+            "category_id":3,
+            "name":"Vacunación y desparasitación"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":8,
+        "fields":{
+            "category_id":4,
+            "name":"Odontología"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":9,
+        "fields":{
+            "category_id":4,
+            "name":"Dermatología"
+        }
+    },
+    {
+        "model":"veterinaries.Service",
+        "pk":10,
+        "fields":{
+            "category_id":4,
+            "name":"Fisioterapia"
+        }
+    }
+]

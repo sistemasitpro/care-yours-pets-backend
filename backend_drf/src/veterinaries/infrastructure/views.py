@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 # serializers
 from .serializers import (
-    RegisterVeterinary, VeterinaryInfo
+    RegisterVeterinary, VeterinaryInfo, RegisterService
 )
 
 # repositories
@@ -100,7 +100,7 @@ class Logout(generics.GenericAPIView):
         )
 
 
-class Veternary(viewsets.ReadOnlyModelViewSet):
+class Veterinary(viewsets.ReadOnlyModelViewSet):
     
     serializer_class = VeterinaryInfo
     
@@ -123,5 +123,29 @@ class Veternary(viewsets.ReadOnlyModelViewSet):
         return Response(
             data=serializer.data,
             status=status.HTTP_200_OK,
+            content_type='application/json'
+        )
+
+
+class CreateService(generics.GenericAPIView):
+    
+    serializer_class = RegisterService
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            msg = {
+                'detail':'Servicio registrado.'
+            }
+            return Response(
+                data=msg,
+                status=status.HTTP_201_CREATED,
+                content_type='application/json'
+            )
+        return Response(
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
             content_type='application/json'
         )
