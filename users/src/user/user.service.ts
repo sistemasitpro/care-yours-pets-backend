@@ -62,7 +62,7 @@ export class UserService {
                 switch (error.constraint) {
                     case 'UQ_97672ac88f789774dd47f7c8be3':
                         throw new ConflictException({
-                            email: ES_I18N_MESSAGES['existEmail'],
+                            email: ES_I18N_MESSAGES['existEmail'], field: 'email'
                         });
                         break;
                     case 'UQ_17d1817f241f10a3dbafb169fd2':
